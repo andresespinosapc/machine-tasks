@@ -48,6 +48,7 @@ class Task(object):
         Returns Error if a path is invalid in the stored paths
         """
         paths = [self.train_path, self.valid_path] + self.test_paths
+        paths = list(filter(lambda x: x is not None, paths))
 
         for p in paths:
             if not os.path.isfile(p):

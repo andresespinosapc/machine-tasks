@@ -1,6 +1,7 @@
 from LongLookupTables import LongLookupTask
 from LookupTables import LookupTask
 from SymbolRewriting import SymbolTask
+from SCAN import SCANTask
 from tasks import Task
 
 
@@ -28,10 +29,17 @@ def get_task(name,
                                             is thus a diagonal that starts at some random position.
                 "long_lookup_intermediate_noise" : noisy long lookup table where there are multiple
                                                 start token and only the last one really counts
+                "scan_simple": Random split with 80% of train data and 20% of test data
+                "scan_length": Train of shorter sequences and test of longer sequences
+                "scan_addprim_turn_left": Training set includes all of the compositional tasks that
+                                            do not include "turn_left", as well as just the primitive "turn_left"
+                                            command in isolation
+                "scan_addprim_jump": Training set includes all of the compositional tasks that
+                                            do not include "jump", as well as just the primitive "jump"
+                                            command in isolation
                 NotImplemented Option:
                 "long lookup jump" : Lookup tables with training 1 2 and 4 compositions (i.e jumping 3)
                                     currently does not have appropriate generation.txt
-                "SCAN": classical SCAN task
         is_small (bool, optional): whether to run a smaller verson of the task.
             Used for getting less statistically significant results.
         is_mini (bool, optional): whether to run a smaller verson of the task.
@@ -58,9 +66,9 @@ def get_task(name,
         return SymbolTask(is_small=is_small, is_mini=is_mini)
 
     # classical scan
-    elif name == "SCAN":
-        raise NotImplementedError(
-            "SCAN dataset not yet implemented to be used as sub Task Object")
+    elif "scan" in name:
+        sub_task = name.replace('scan_', '')
+        return SCANTask(sub_task=sub_task)
 
     else:
         raise ValueError("Unkown name : {}".format(name))
