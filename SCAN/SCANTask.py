@@ -19,10 +19,10 @@ class SCANTask(Task):
         data_dir = os.path.join(dir_path, possible_sub_tasks[sub_task])
 
         split_files = filter(lambda x: sub_task in x, os.listdir(data_dir))
-        split_files = map(lambda x: x.split('.')[0], split_files)
+        split_files = list(map(lambda x: x.split('.')[0], split_files))
         train_file = next(filter(lambda x: 'train' in x, split_files), None)
         valid_file = next(filter(lambda x: 'validation' in x, split_files), None)
-        test_files = list(filter(lambda x: 'train' in x, split_files))
+        test_files = list(filter(lambda x: 'test' in x, split_files))
 
         super().__init__(
             'SCAN_%s' % (sub_task),
